@@ -5,9 +5,9 @@ long_description = open("README.rst").read()
 
 setup(
     name="PyChromecast",
-    version="9.2.0",
+    version="9.2.1",
     license="MIT",
-    url="https://github.com/balloob/pychromecast",
+    url="https://github.com/Moisesbr/pychromecast",
     author="Paulus Schoutsen",
     author_email="paulus@paulusschoutsen.nl",
     description="Python module to talk to Google Chromecast.",
