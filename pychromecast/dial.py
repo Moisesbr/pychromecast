@@ -9,7 +9,6 @@ import ssl
 import urllib.request
 from uuid import UUID
 
-import zeroconf
 
 from .const import CAST_TYPE_CHROMECAST, CAST_TYPES, SERVICE_TYPE_HOST
 
@@ -28,34 +27,35 @@ def get_host_from_service(service, zconf):
     if service.type == SERVICE_TYPE_HOST:
         return service.data + (None,)
 
-    try:
-        service_info = zconf.get_service_info("_googlecast._tcp.local.", service.data)
-        if service_info:
-            _LOGGER.debug(
-                "get_info_from_service resolved service %s to service_info %s",
-                service,
-                service_info,
-            )
-    except IOError:
-        pass
-    return _get_host_from_zc_service_info(service_info) + (service_info,)
+    # try:
+    #     service_info = zconf.get_service_info("_googlecast._tcp.local.", service.data)
+    #     if service_info:
+    #         _LOGGER.debug(
+    #             "get_info_from_service resolved service %s to service_info %s",
+    #             service,
+    #             service_info,
+    #         )
+    # except IOError:
+    #     pass
+    return zconf
+    # return _get_host_from_zc_service_info(service_info) + (service_info,)
 
 
-def _get_host_from_zc_service_info(service_info: zeroconf.ServiceInfo):
-    """Get hostname or IP + port from zeroconf service_info."""
-    host = None
-    port = None
-    if (
-        service_info
-        and service_info.port
-        and (service_info.server or len(service_info.addresses) > 0)
-    ):
-        if len(service_info.addresses) > 0:
-            host = socket.inet_ntoa(service_info.addresses[0])
-        else:
-            host = service_info.server.lower()
-        port = service_info.port
-    return (host, port)
+# def _get_host_from_zc_service_info(service_info: zeroconf.ServiceInfo):
+#     """Get hostname or IP + port from zeroconf service_info."""
+#     host = None
+#     port = None
+#     if (
+#         service_info
+#         and service_info.port
+#         and (service_info.server or len(service_info.addresses) > 0)
+#     ):
+#         if len(service_info.addresses) > 0:
+#             host = socket.inet_ntoa(service_info.addresses[0])
+#         else:
+#             host = service_info.server.lower()
+#         port = service_info.port
+#     return (host, port)
 
 
 def _get_status(host, services, zconf, path, secure, timeout, context):
